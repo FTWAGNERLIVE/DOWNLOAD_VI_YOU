@@ -1,0 +1,15 @@
+# Pastas a serem ignoradas
+__pycache__/
+downloads/
+web/downloads/
+.env
+venv/
+
+# Arquivos de vídeo e áudio temporários
+*.mp4
+*.m4a
+*.webm
+*.mp3
+*.part
+*.ytdl
+*.opus
