@@ -13,3 +13,9 @@ venv/
 *.part
 *.ytdl
 *.opus
+
+# Ignorar binarios pesados e instaladores (mantendo apenas o codigo-fonte limpo)
+build/
+dist/
+*.exe
+*.spec

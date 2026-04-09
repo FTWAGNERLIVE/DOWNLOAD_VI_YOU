@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexDownloader - Baixe vídeos em 4K</title>
+    <title>YouDL - Baixe vídeos em 4K</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -60,6 +60,7 @@
             margin-bottom: 0.5rem;
             background: linear-gradient(to right, #a78bfa, #f472b6);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         p.subtitle {
@@ -190,7 +191,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>NexDownloader</h1>
+        <h1>YouDL</h1>
         <p class="subtitle">A forma mais elegante de baixar vídeos em Qualidade Máxima.</p>
         
         <div class="form-group">
@@ -220,10 +221,7 @@
 
         <div id="result-container">
             <div class="success-text">✨ Tudo pronto!</div>
-            <a id="download-link" href="#" class="download-btn">Baixar para o Computador</a>
-            <div style="margin-top:15px">
-                <a href="#" onclick="location.reload()" style="color:#94a3b8; font-size: 0.9rem; text-decoration: underline;">Baixar outro vídeo</a>
-            </div>
+            <a id="download-link" href="#" class="download-btn">Salvar para o Computador</a>
         </div>
     </div>
 
@@ -241,6 +239,19 @@
         const statEta = document.getElementById('stat-eta');
         const statStatus = document.getElementById('stat-status');
         const downloadLink = document.getElementById('download-link');
+
+        async function openSaveDialog(jobId) {
+            try {
+                if (window.pywebview && window.pywebview.api) {
+                    await window.pywebview.api.save_video(jobId);
+                } else {
+                    // Fallback se abrir no navegador normal
+                    window.location.href = `/download/${jobId}`;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
 
         function cleanString(str) {
             if(!str) return '';
@@ -304,7 +315,16 @@
                 if(data.status === 'completed') {
                     progressContainer.style.display = 'none';
                     resultContainer.style.display = 'block';
-                    downloadLink.href = `/download/${jobId}`;
+                    downloadLink.onclick = (e) => {
+                        e.preventDefault();
+                        openSaveDialog(jobId);
+                    };
+                    
+                    // Restaura o formulario para aceitar novo video imediatamente
+                    btnStart.disabled = false;
+                    btnStart.textContent = 'Iniciar Nova Conversão';
+                    urlInput.value = '';
+                    
                 } else if(data.status === 'error') {
                     showError("Erro: " + data.error);
                     resetForm();

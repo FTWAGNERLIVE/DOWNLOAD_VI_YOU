@@ -124,6 +124,6 @@ def download_file(job_id):
         return "Arquivo não encontrado no servidor", 404
 
 if __name__ == '__main__':
-    print("Iniciando servidor NexDownloader...")
+    print("Iniciando servidor YouDL...")
     print("Acesse: http://127.0.0.1:5000/")
     app.run(debug=True, port=5000)
